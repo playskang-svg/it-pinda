@@ -18,7 +18,8 @@ jobs:
       - run: corepack enable && corepack prepare pnpm@12.5.1 --activate
       - run: pnpm install --frozen-lockfile
       - run: node scripts/build.mjs
-      - run: tar -czf open-next.tgz .open-next
+      - run: pnpm exec wrangler deploy --dry-run --outdir worker-dist
+      - run: tar -czf open-next.tgz .open-next/assets worker-dist
       - uses: actions/upload-artifact@v4
         with:
           name: open-next

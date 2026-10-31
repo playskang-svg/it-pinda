@@ -58,3 +58,4 @@ node_modules/
 .secrets/
 .taste-skill/
 og/
+worker-dist/

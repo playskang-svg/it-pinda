@@ -11,9 +11,11 @@ const runId = execSync(
 if (!runId) throw new Error('no successful build run found')
 
 rmSync('.open-next', { recursive: true, force: true })
+rmSync('worker-dist', { recursive: true, force: true })
 rmSync('open-next.tgz', { force: true })
 sh(`gh run download ${runId} --repo ${repo} --name open-next --dir .`)
 sh('tar --force-local -xzf open-next.tgz')
 rmSync('open-next.tgz')
-sh('pnpm exec wrangler deploy')
+// Absolute Linux paths in the handler only resolve on the runner, so the runner bundles and this uploads as is.
+sh('pnpm exec wrangler deploy worker-dist/index.js --no-bundle')
 console.log(`deployed run ${runId}`)
