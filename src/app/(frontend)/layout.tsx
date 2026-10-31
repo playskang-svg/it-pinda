@@ -28,6 +28,9 @@ export const metadata: Metadata = {
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID
 
+// Menus live in D1, which is empty during the build.
+export const dynamic = 'force-dynamic'
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const payload = await getClient()
   const nav = await payload.findGlobal({ slug: 'navigation' })
