@@ -62,8 +62,10 @@ const cloudflareLogger = {
   silent: () => {},
 } as any // Use PayloadLogger type when it's exported
 
-const cloudflare =
-  isCLI || !isProduction || process.env.SKIP_REMOTE_BINDINGS
+// next build renders nothing from the database, and starting workerd per build worker locks its SQLite files.
+const cloudflare = process.env.SKIP_REMOTE_BINDINGS
+  ? ({ env: {} } as CloudflareContext)
+  : isCLI || !isProduction
     ? await getCloudflareContextFromWrangler()
     : await getCloudflareContext({ async: true })
 
@@ -111,8 +113,7 @@ function getCloudflareContextFromWrangler(): Promise<CloudflareContext> {
     ({ getPlatformProxy }) =>
       getPlatformProxy({
         environment: process.env.CLOUDFLARE_ENV,
-        // `next build` runs without a Cloudflare login and reads no data; only CLI runs reach remote D1.
-        remoteBindings: isProduction && !process.env.SKIP_REMOTE_BINDINGS,
+        remoteBindings: isProduction,
       } satisfies GetPlatformProxyOptions),
   )
 }
