@@ -15,6 +15,9 @@ const symlinkPatch = path.join(root, 'scripts', 'win-symlink.cjs').split(path.se
 run('pnpm exec next build --webpack', {
   NODE_OPTIONS: `--no-deprecation --max-old-space-size=8000 --require=${symlinkPatch}`,
   NODE_PATH: path.join(store, sharp, 'node_modules'),
+  SKIP_REMOTE_BINDINGS: '1',
+  PAYLOAD_SECRET: process.env.PAYLOAD_SECRET || 'build-time-only',
+  NEXT_PUBLIC_SERVER_URL: 'https://it.pinda.kr',
 })
 run('pnpm exec opennextjs-cloudflare build --skipNextBuild', {
   NODE_OPTIONS: `--require=${symlinkPatch}`,

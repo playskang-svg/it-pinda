@@ -57,3 +57,4 @@ node_modules/
 .wrangler/
 .secrets/
 .taste-skill/
+og/

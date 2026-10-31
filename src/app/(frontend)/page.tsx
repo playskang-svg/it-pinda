@@ -1,59 +1,77 @@
-import { headers as getHeaders } from 'next/headers.js'
-import Image from 'next/image'
-import { getPayload } from 'payload'
-import React from 'react'
-import { fileURLToPath } from 'url'
+import Link from 'next/link'
 
-import config from '@/payload.config'
-import './styles.css'
+import { DealList } from '@/components/DealList'
+import { PlanTable } from '@/components/PlanTable'
+import { PostList } from '@/components/PostList'
+import { getPlanRows } from '@/lib/data'
+import { getClient, publishedWhere } from '@/lib/payload'
+import { isActiveDeal } from '@/lib/pricing'
+
+export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
-  const headers = await getHeaders()
-  const payloadConfig = await config
-  const payload = await getPayload({ config: payloadConfig })
-  const { user } = await payload.auth({ headers })
-
-  const fileURL = `vscode://file/${fileURLToPath(import.meta.url)}`
+  const payload = await getClient()
+  const [rows, deals, posts] = await Promise.all([
+    getPlanRows('home', { categories: ['ai', 'ott'] }),
+    payload.find({ collection: 'deals', limit: 50, depth: 1, pagination: false }),
+    payload.find({
+      collection: 'posts',
+      where: publishedWhere(),
+      limit: 6,
+      depth: 1,
+      sort: '-publishedAt',
+    }),
+  ])
+  const activeDeals = deals.docs.filter((deal) => isActiveDeal(deal, new Date())).slice(0, 3)
 
   return (
-    <div className="home">
-      <div className="content">
-        <picture>
-          <source srcSet="https://raw.githubusercontent.com/payloadcms/payload/3.x/packages/ui/src/assets/payload-favicon.svg" />
-          <Image
-            alt="Payload Logo"
-            height={65}
-            src="https://raw.githubusercontent.com/payloadcms/payload/3.x/packages/ui/src/assets/payload-favicon.svg"
-            width={65}
+    <>
+      <section className="hero">
+        <div className="frame hero__grid">
+          <div>
+            <h1>AI·OTT 구독료, 더 내고 있지 않나요?</h1>
+            <p>공식 요금을 나란히 비교하고, 지금 받을 수 있는 공식 할인까지 확인하세요.</p>
+            <a className="button" href="#compare">
+              내 요금제 비교하기
+            </a>
+          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            alt="집 소파에 앉아 휴대폰으로 구독 결제 내역을 확인하는 한국인 여성"
+            fetchPriority="high"
+            height={800}
+            src="/photos/hero.webp"
+            width={1200}
           />
-        </picture>
-        {!user && <h1>Welcome to your new project.</h1>}
-        {user && <h1>Welcome back, {user.email}</h1>}
-        <div className="links">
-          <a
-            className="admin"
-            href={payloadConfig.routes.admin}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Go to admin panel
-          </a>
-          <a
-            className="docs"
-            href="https://payloadcms.com/docs"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Documentation
-          </a>
         </div>
-      </div>
-      <div className="footer">
-        <p>Update this page by editing</p>
-        <a className="codeLink" href={fileURL}>
-          <code>app/(frontend)/page.tsx</code>
-        </a>
-      </div>
-    </div>
+      </section>
+
+      <section className="section section--tight" id="compare">
+        <div className="frame">
+          <h2>공식 요금 한눈에 비교</h2>
+          <PlanTable rows={rows} />
+          <Link className="text-link" href="/compare">
+            VPN까지 전체 요금 보기
+          </Link>
+        </div>
+      </section>
+
+      <section className="section section--tone">
+        <div className="frame">
+          <h2>이달의 할인</h2>
+          <DealList deals={activeDeals} from="home" />
+          <Link className="text-link" href="/deals">
+            할인 전체 보기
+          </Link>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="frame">
+          <h2>요금제 고르기 전에 읽는 글</h2>
+          <PostList posts={posts.docs} />
+        </div>
+      </section>
+    </>
   )
 }

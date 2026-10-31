@@ -1,0 +1,30 @@
+import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
+import {
+  type JSXConvertersFunction,
+  RichText as PayloadRichText,
+} from '@payloadcms/richtext-lexical/react'
+
+const startsWithCaptionMark = (node: { children?: unknown[] }): boolean => {
+  const first = node.children?.[0] as { text?: string } | undefined
+  return Boolean(first?.text?.startsWith('▲'))
+}
+
+const converters: JSXConvertersFunction = ({ defaultConverters }) => ({
+  ...defaultConverters,
+  paragraph: ({ node, nodesToJSX }) => {
+    const children = nodesToJSX({ nodes: node.children })
+    if (startsWithCaptionMark(node)) return <p className="caption">{children}</p>
+    return <p>{children}</p>
+  },
+})
+
+export function RichText({ data }: { data: unknown }) {
+  return (
+    <PayloadRichText
+      className="prose"
+      converters={converters}
+      data={data as SerializedEditorState}
+      disableContainer
+    />
+  )
+}

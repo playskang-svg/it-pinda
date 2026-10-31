@@ -1,0 +1,19 @@
+// Downloads the Linux build of the latest successful run and deploys it with the local wrangler login.
+import { execSync } from 'node:child_process'
+import { rmSync } from 'node:fs'
+
+const sh = (cmd) => execSync(cmd, { stdio: 'inherit' })
+const repo = 'playskang-svg/it-pinda'
+const runId = execSync(
+  `gh run list --repo ${repo} --workflow build.yml --status success --limit 1 --json databaseId --jq ".[0].databaseId"`,
+  { encoding: 'utf8' },
+).trim()
+if (!runId) throw new Error('no successful build run found')
+
+rmSync('.open-next', { recursive: true, force: true })
+rmSync('open-next.tgz', { force: true })
+sh(`gh run download ${runId} --repo ${repo} --name open-next --dir .`)
+sh('tar --force-local -xzf open-next.tgz')
+rmSync('open-next.tgz')
+sh('pnpm exec wrangler deploy')
+console.log(`deployed run ${runId}`)

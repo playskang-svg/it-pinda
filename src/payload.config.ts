@@ -10,6 +10,17 @@ import { r2Storage } from '@payloadcms/storage-r2'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
+import { AffiliateClicks } from './collections/AffiliateClicks'
+import { AffiliateLinks } from './collections/AffiliateLinks'
+import { Categories } from './collections/Categories'
+import { Deals } from './collections/Deals'
+import { Inquiries } from './collections/Inquiries'
+import { Pages } from './collections/Pages'
+import { Plans } from './collections/Plans'
+import { Posts } from './collections/Posts'
+import { Services } from './collections/Services'
+import { Navigation } from './globals/Navigation'
+import { ko } from '@payloadcms/translations/languages/ko'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -63,7 +74,22 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media],
+  serverURL: process.env.NEXT_PUBLIC_SERVER_URL || '',
+  i18n: { supportedLanguages: { ko }, fallbackLanguage: 'ko' },
+  collections: [
+    Posts,
+    Pages,
+    Categories,
+    Media,
+    Services,
+    Plans,
+    Deals,
+    AffiliateLinks,
+    AffiliateClicks,
+    Inquiries,
+    Users,
+  ],
+  globals: [Navigation],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -85,7 +111,8 @@ function getCloudflareContextFromWrangler(): Promise<CloudflareContext> {
     ({ getPlatformProxy }) =>
       getPlatformProxy({
         environment: process.env.CLOUDFLARE_ENV,
-        remoteBindings: isProduction,
+        // `next build` runs without a Cloudflare login and reads no data; only CLI runs reach remote D1.
+        remoteBindings: isProduction && !process.env.SKIP_REMOTE_BINDINGS,
       } satisfies GetPlatformProxyOptions),
   )
 }
