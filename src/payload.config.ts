@@ -63,7 +63,7 @@ const cloudflareLogger = {
 } as any // Use PayloadLogger type when it's exported
 
 const cloudflare =
-  isCLI || !isProduction
+  isCLI || !isProduction || process.env.SKIP_REMOTE_BINDINGS
     ? await getCloudflareContextFromWrangler()
     : await getCloudflareContext({ async: true })
 
