@@ -820,3 +820,17 @@ small {
     transition: none !important;
   }
 }
+
+.section--tone .button--quiet,
+.section--tone .link-card {
+  background: #fff;
+}
+
+.post .frame--text > .share {
+  max-width: 760px;
+  margin-inline: auto;
+}
+
+.link-card:not(:has(img)) {
+  grid-template-columns: minmax(0, 1fr);
+}

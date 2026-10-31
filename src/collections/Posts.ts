@@ -100,7 +100,7 @@ export const Posts: CollectionConfig = {
       type: 'relationship',
       relationTo: 'posts',
       hasMany: true,
-      maxDepth: 1,
+      maxDepth: 2,
     },
     {
       name: 'sources',
