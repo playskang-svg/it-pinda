@@ -9,3 +9,5 @@ hoistPattern:
   - '*'
   - '!sharp'
   - '!@img/*'
+patchedDependencies:
+  payload: patches/payload.patch
