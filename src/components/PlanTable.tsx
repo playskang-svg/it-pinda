@@ -5,29 +5,37 @@ import { useMemo, useState } from 'react'
 import type { PlanRow } from '@/lib/data'
 import { formatDate, formatPrice, sortByPrice } from '@/lib/pricing'
 
+const ORDER = ['ai', 'ott', 'vpn', 'hosting', 'software'] as const
 const LABELS: Record<string, string> = { ai: 'AI', ott: 'OTT', vpn: 'VPN', hosting: '웹호스팅', software: '소프트웨어' }
 
 export function PlanTable({
   rows,
   initialCategory,
   showTabs = true,
+  limit,
 }: {
   rows: PlanRow[]
   initialCategory?: string
   showTabs?: boolean
+  limit?: number
 }) {
-  const categories = useMemo(() => [...new Set(rows.map((r) => r.category))], [rows])
-  const [category, setCategory] = useState(initialCategory ?? categories[0])
+  const categories = useMemo(
+    () => ORDER.filter((c) => rows.some((r) => r.category === c)),
+    [rows],
+  )
+  const [category, setCategory] = useState<string | undefined>(initialCategory ?? categories[0])
   const [order, setOrder] = useState<'price' | 'service'>('price')
 
   const visible = useMemo(() => {
     const filtered = showTabs ? rows.filter((r) => r.category === category) : rows
-    return order === 'price'
-      ? sortByPrice(filtered)
-      : [...filtered].sort(
-          (a, b) => a.service.localeCompare(b.service, 'ko') || a.monthlyPrice - b.monthlyPrice,
-        )
-  }, [rows, category, order, showTabs])
+    const sorted =
+      order === 'price'
+        ? sortByPrice(filtered)
+        : [...filtered].sort(
+            (a, b) => a.service.localeCompare(b.service, 'ko') || a.monthlyPrice - b.monthlyPrice,
+          )
+    return limit ? sorted.slice(0, limit) : sorted
+  }, [rows, category, order, showTabs, limit])
 
   return (
     <div className="plans">

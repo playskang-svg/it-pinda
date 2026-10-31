@@ -1,5 +1,5 @@
 // Prices and conditions below were read from each official page on 2026-11-01.
-export const VERIFIED = '2026-11-01T00:00:00.000Z'
+export const VERIFIED = '2026-10-31T15:30:00.000Z'
 
 type Text = string | { text: string; url: string }
 export type Block =

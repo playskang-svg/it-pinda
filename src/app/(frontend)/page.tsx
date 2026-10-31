@@ -49,9 +49,9 @@ export default async function HomePage() {
       <section className="section section--tight" id="compare">
         <div className="frame">
           <h2>공식 요금 한눈에 비교</h2>
-          <PlanTable rows={rows} />
+          <PlanTable limit={7} rows={rows} />
           <Link className="text-link" href="/compare">
-            VPN까지 전체 요금 보기
+            전체 요금표 보기
           </Link>
         </div>
       </section>

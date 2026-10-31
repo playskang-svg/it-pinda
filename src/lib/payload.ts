@@ -15,3 +15,6 @@ export const publishedWhere = () => ({
     { publishedAt: { less_than_equal: new Date().toISOString() } },
   ],
 })
+
+// Media URLs already carry serverURL in production and are relative elsewhere.
+export const absoluteUrl = (url: string): string => (url.startsWith('http') ? url : `${SITE_URL}${url}`)

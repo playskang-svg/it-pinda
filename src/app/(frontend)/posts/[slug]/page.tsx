@@ -7,7 +7,7 @@ import { PlanTable } from '@/components/PlanTable'
 import { RichText } from '@/components/RichText'
 import { ShareBar } from '@/components/ShareBar'
 import { getPlanRows } from '@/lib/data'
-import { getClient, publishedWhere, SITE_URL } from '@/lib/payload'
+import { absoluteUrl, getClient, publishedWhere, SITE_URL } from '@/lib/payload'
 import { formatDate } from '@/lib/pricing'
 
 export const dynamic = 'force-dynamic'
@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getPost(slug)
   if (!post) return {}
   const og = typeof post.ogImage === 'object' ? post.ogImage?.url : null
-  const image = og ? `${SITE_URL}${og}` : '/og-default.png'
+  const image = og ? absoluteUrl(og) : '/og-default.png'
   const title = post.metaTitle || post.title
   return {
     title,
@@ -68,7 +68,7 @@ export default async function PostPage({ params }: Props) {
     description: post.summary,
     datePublished: post.publishedAt,
     dateModified: post.updatedAt,
-    image: hero?.url ? `${SITE_URL}${hero.url}` : undefined,
+    image: hero?.url ? absoluteUrl(hero.url) : undefined,
     mainEntityOfPage: url,
   }
 
