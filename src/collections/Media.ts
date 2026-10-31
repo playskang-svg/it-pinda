@@ -19,5 +19,9 @@ export const Media: CollectionConfig = {
     // These are not supported on Workers yet due to lack of sharp
     crop: false,
     focalPoint: false,
+    modifyResponseHeaders: ({ headers }) => {
+      headers.set('Cache-Control', 'public, max-age=604800')
+      return headers
+    },
   },
 }

@@ -20,11 +20,12 @@ const converters: JSXConvertersFunction = ({ defaultConverters }) => ({
 
 export function RichText({ data }: { data: unknown }) {
   return (
-    <PayloadRichText
-      className="prose"
-      converters={converters}
-      data={data as SerializedEditorState}
-      disableContainer
-    />
+    <div className="prose">
+      <PayloadRichText
+        converters={converters}
+        data={data as SerializedEditorState}
+        disableContainer
+      />
+    </div>
   )
 }
