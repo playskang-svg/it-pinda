@@ -3,11 +3,13 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { cache } from 'react'
 
+import { HalfCta } from '@/components/HalfCta'
 import { PhotoHead } from '@/components/PhotoHead'
 import { PlanTable } from '@/components/PlanTable'
 import { RichText } from '@/components/RichText'
 import { ShareBar } from '@/components/ShareBar'
 import { getPlanRows } from '@/lib/data'
+import { cheapestByService, getHalfProducts, getOfficialFloor } from '@/lib/half'
 import { absoluteUrl, getClient, publishedWhere, SITE_URL } from '@/lib/payload'
 import { formatDate } from '@/lib/pricing'
 
@@ -58,7 +60,14 @@ export default async function PostPage({ params }: Props) {
   const hero = typeof post.heroImage === 'object' ? post.heroImage : null
   const category = typeof post.category === 'object' ? post.category : null
   const serviceIds = (post.relatedServices ?? []).map((s) => (typeof s === 'object' ? s.id : s))
-  const rows = serviceIds.length ? await getPlanRows(`post:${post.slug}`, { serviceIds }) : []
+  const from = `post:${post.slug}`
+  const [rows, halfProducts, floor] = await Promise.all([
+    serviceIds.length ? getPlanRows(from, { serviceIds }) : [],
+    serviceIds.length ? getHalfProducts({ serviceIds }) : [],
+    getOfficialFloor(serviceIds),
+  ])
+  // One product per service keeps the hook box short.
+  const hooks = Object.values(cheapestByService(halfProducts))
   const related = (post.relatedPosts ?? []).filter((p) => typeof p === 'object')
   const url = `${SITE_URL}/posts/${post.slug}`
 
@@ -103,7 +112,12 @@ export default async function PostPage({ params }: Props) {
             <PlanTable rows={rows} showTabs={false} />
           </section>
         ) : null}
-        <RichText data={post.content} />
+        <HalfCta compact floor={floor} from={`${from}:top`} products={hooks} />
+        <RichText
+          data={post.content}
+          midway={<HalfCta compact floor={floor} from={`${from}:mid`} products={hooks} title="여기까지 읽으셨다면, 이제 요금을 줄일 차례입니다" />}
+        />
+        <HalfCta floor={floor} from={`${from}:end`} products={hooks} title="정가로 계속 내시겠어요?" />
         {related.length ? (
           <section className="link-cards" aria-label="함께 보면 좋은 글">
             {related.map((item) => {

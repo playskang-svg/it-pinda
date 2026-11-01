@@ -1,10 +1,13 @@
 import Link from 'next/link'
 
 import { DealList } from '@/components/DealList'
+import { HalfButton } from '@/components/HalfButton'
+import { HalfGrid } from '@/components/HalfGrid'
 import { PhotoHead } from '@/components/PhotoHead'
 import { PlanTable } from '@/components/PlanTable'
 import { PostList } from '@/components/PostList'
 import { getPlanRows } from '@/lib/data'
+import { GAMSGO_CODE, getHalfProducts } from '@/lib/half'
 import { getClient, publishedWhere } from '@/lib/payload'
 import { isActiveDeal } from '@/lib/pricing'
 
@@ -12,7 +15,7 @@ export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
   const payload = await getClient()
-  const [rows, deals, posts] = await Promise.all([
+  const [rows, deals, posts, featured] = await Promise.all([
     getPlanRows('home', { categories: ['ai', 'ott'] }),
     payload.find({ collection: 'deals', limit: 50, depth: 1, pagination: false }),
     payload.find({
@@ -22,6 +25,7 @@ export default async function HomePage() {
       depth: 1,
       sort: '-publishedAt',
     }),
+    getHalfProducts({ featured: true, limit: 8 }),
   ])
   const activeDeals = deals.docs.filter((deal) => isActiveDeal(deal, new Date())).slice(0, 3)
 
@@ -34,10 +38,27 @@ export default async function HomePage() {
         tall
         title="AI·OTT 구독료, 더 내고 있지 않나요?"
       >
-        <a className="button" href="#compare">
-          내 요금제 비교하기
-        </a>
+        <div className="hero-actions">
+          <a className="button" href="#compare">
+            내 요금제 비교하기
+          </a>
+          <HalfButton href="/half" label="구독할인 보기" />
+        </div>
       </PhotoHead>
+
+      <section className="section section--tone" id="half">
+        <div className="frame">
+          <h2>지금 가장 많이 찾는 반값 구독</h2>
+          <p className="section-lede">
+            정식 요금제를 여러 명이 나눠 쓰는 겜스고 공유 구독입니다. 정가로 계속 내면 1년에 수십만 원이 그냥
+            나갑니다. 프로모션 코드 <code>{GAMSGO_CODE}</code>로 추가 할인.
+          </p>
+          <HalfGrid from="home" products={featured} />
+          <Link className="text-link" href="/half">
+            반값 구독 전체 보기
+          </Link>
+        </div>
+      </section>
 
       <section className="section" id="compare">
         <div className="frame">

@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react'
 
+import { HalfButton } from '@/components/HalfButton'
 import type { PlanRow } from '@/lib/data'
 import { formatDate, formatPrice, sortByPrice } from '@/lib/pricing'
 
@@ -34,7 +35,9 @@ export function PlanTable({
         : [...filtered].sort(
             (a, b) => a.service.localeCompare(b.service, 'ko') || a.monthlyPrice - b.monthlyPrice,
           )
-    return limit ? sorted.slice(0, limit) : sorted
+    // Plans with a half-price offer come first; the rest keep their order below.
+    const partitioned = [...sorted.filter((r) => r.half && r.monthlyPrice > 0), ...sorted.filter((r) => !r.half || r.monthlyPrice === 0)]
+    return limit ? partitioned.slice(0, limit) : partitioned
   }, [rows, category, order, showTabs, limit])
 
   return (
@@ -72,7 +75,7 @@ export function PlanTable({
               <th scope="col">핵심 차이</th>
               <th scope="col">확인일</th>
               <th scope="col">
-                <span className="sr-only">공식 요금 링크</span>
+                <span className="sr-only">구독할인 링크</span>
               </th>
             </tr>
           </thead>
@@ -96,15 +99,19 @@ export function PlanTable({
                 </td>
                 <td data-label="확인일">{formatDate(row.verifiedAt)}</td>
                 <td className="plans__action">
-                  <a
-                    className="button button--quiet"
-                    href={row.href}
-                    rel={row.sponsored ? 'sponsored nofollow noopener' : 'noopener'}
-                    target="_blank"
-                  >
-                    공식 요금 확인
-                  </a>
-                  {row.sponsored ? <small>제휴 링크</small> : null}
+                  {row.monthlyPrice === 0 ? null : row.half ? (
+                    <HalfButton href={row.half.href} price={row.half.price} small />
+                  ) : (
+                    <a
+                      className="button button--quiet"
+                      href={row.href}
+                      rel={row.sponsored ? 'sponsored nofollow noopener' : 'noopener'}
+                      target="_blank"
+                    >
+                      {row.sponsored ? '구독할인 받기' : '공식 페이지'}
+                    </a>
+                  )}
+                  {row.monthlyPrice !== 0 && (row.half || row.sponsored) ? <small>제휴 링크</small> : null}
                 </td>
               </tr>
             ))}

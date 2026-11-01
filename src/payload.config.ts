@@ -14,7 +14,7 @@ import { AffiliateClicks } from './collections/AffiliateClicks'
 import { AffiliateLinks } from './collections/AffiliateLinks'
 import { Categories } from './collections/Categories'
 import { Deals } from './collections/Deals'
-import { Inquiries } from './collections/Inquiries'
+import { GamsgoProducts } from './collections/GamsgoProducts'
 import { Pages } from './collections/Pages'
 import { Plans } from './collections/Plans'
 import { Posts } from './collections/Posts'
@@ -88,7 +88,7 @@ export default buildConfig({
     Deals,
     AffiliateLinks,
     AffiliateClicks,
-    Inquiries,
+    GamsgoProducts,
     Users,
   ],
   globals: [Navigation],

@@ -1,8 +1,10 @@
+import { HalfGrid } from '@/components/HalfGrid'
 import { PhotoHead } from '@/components/PhotoHead'
 import { PlanTable } from '@/components/PlanTable'
 import { PostList } from '@/components/PostList'
 import { ShareBar } from '@/components/ShareBar'
 import { getPlanRows } from '@/lib/data'
+import { getHalfProducts } from '@/lib/half'
 import { getClient, publishedWhere, SITE_URL } from '@/lib/payload'
 import type { Service } from '@/payload-types'
 
@@ -28,7 +30,8 @@ export async function CategoryPage({
     limit: 1,
   })
   const category = categories.docs[0]
-  const [posts, rows] = await Promise.all([
+  const halfCategory = planCategory === 'ai' ? 'ai' : planCategory === 'ott' ? 'ott' : null
+  const [posts, rows, half] = await Promise.all([
     category
       ? payload.find({
           collection: 'posts',
@@ -39,6 +42,7 @@ export async function CategoryPage({
         })
       : null,
     planCategory ? getPlanRows(slug, { categories: [planCategory] }) : null,
+    halfCategory ? getHalfProducts({ category: halfCategory, limit: 8 }) : [],
   ])
 
   return (
@@ -49,6 +53,18 @@ export async function CategoryPage({
           <div className="frame">
             <h2>공식 요금표</h2>
             <PlanTable rows={rows} showTabs={false} />
+          </div>
+        </section>
+      ) : null}
+      {half.length ? (
+        <section className="section section--tone">
+          <div className="frame">
+            <h2>{title} 반값으로 쓰기</h2>
+            <p className="section-lede">
+              같은 서비스를 겜스고 공유 구독으로 쓰면 이만큼 내려갑니다. 정가로 계속 내면 그 차액은 그냥
+              사라집니다.
+            </p>
+            <HalfGrid from={`category:${slug}`} products={half} />
           </div>
         </section>
       ) : null}

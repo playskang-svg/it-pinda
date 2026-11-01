@@ -76,7 +76,7 @@ export interface Config {
     deals: Deal;
     'affiliate-links': AffiliateLink;
     'affiliate-clicks': AffiliateClick;
-    inquiries: Inquiry;
+    'gamsgo-products': GamsgoProduct;
     users: User;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -94,7 +94,7 @@ export interface Config {
     deals: DealsSelect<false> | DealsSelect<true>;
     'affiliate-links': AffiliateLinksSelect<false> | AffiliateLinksSelect<true>;
     'affiliate-clicks': AffiliateClicksSelect<false> | AffiliateClicksSelect<true>;
-    inquiries: InquiriesSelect<false> | InquiriesSelect<true>;
+    'gamsgo-products': GamsgoProductsSelect<false> | GamsgoProductsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -356,14 +356,49 @@ export interface AffiliateClick {
   createdAt: string;
 }
 /**
+ * 겜스고 공유 구독 상품입니다. 가격은 겜스고 목록의 월 환산가이며 확인일을 함께 적습니다.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "inquiries".
+ * via the `definition` "gamsgo-products".
  */
-export interface Inquiry {
+export interface GamsgoProduct {
   id: number;
   name: string;
-  email: string;
-  message: string;
+  /**
+   * 사이트 안 주소 /half/주소
+   */
+  slug: string;
+  category: 'ai' | 'ott' | 'music' | 'software' | 'life';
+  featured?: boolean | null;
+  /**
+   * 비우면 가격 대신 "겜스고에서 확인"으로 표시됩니다.
+   */
+  monthlyPrice?: number | null;
+  /**
+   * 예: 12개월 기준 월 환산
+   */
+  priceNote?: string | null;
+  summary: string;
+  features?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  faq?:
+    | {
+        q: string;
+        a: string;
+        id?: string | null;
+      }[]
+    | null;
+  logo?: string | null;
+  /**
+   * 연결하면 그 서비스의 요금표와 글에 반값 구독 버튼이 붙습니다.
+   */
+  service?: (number | null) | Service;
+  affiliateLink: number | AffiliateLink;
+  verifiedAt: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -454,8 +489,8 @@ export interface PayloadLockedDocument {
         value: number | AffiliateClick;
       } | null)
     | ({
-        relationTo: 'inquiries';
-        value: number | Inquiry;
+        relationTo: 'gamsgo-products';
+        value: number | GamsgoProduct;
       } | null)
     | ({
         relationTo: 'users';
@@ -642,12 +677,33 @@ export interface AffiliateClicksSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "inquiries_select".
+ * via the `definition` "gamsgo-products_select".
  */
-export interface InquiriesSelect<T extends boolean = true> {
+export interface GamsgoProductsSelect<T extends boolean = true> {
   name?: T;
-  email?: T;
-  message?: T;
+  slug?: T;
+  category?: T;
+  featured?: T;
+  monthlyPrice?: T;
+  priceNote?: T;
+  summary?: T;
+  features?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  faq?:
+    | T
+    | {
+        q?: T;
+        a?: T;
+        id?: T;
+      };
+  logo?: T;
+  service?: T;
+  affiliateLink?: T;
+  verifiedAt?: T;
   updatedAt?: T;
   createdAt?: T;
 }

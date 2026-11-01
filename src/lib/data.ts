@@ -1,5 +1,6 @@
 import type { Plan, Service } from '@/payload-types'
 
+import { cheapestByService, getHalfProducts, halfHref } from './half'
 import { getClient } from './payload'
 import { type Currency } from './pricing'
 
@@ -17,13 +18,15 @@ export type PlanRow = {
   verifiedAt: string
   href: string
   sponsored: boolean
+  half: { href: string; price: number | null; name: string } | null
 }
 
-const toRow = (plan: Plan, from: string): PlanRow | null => {
+const toRow = (plan: Plan, from: string, half: PlanRow['half']): PlanRow | null => {
   if (typeof plan.service !== 'object') return null
   const link = plan.affiliateLink
   const affiliate = link && typeof link === 'object' ? link : null
   return {
+    half,
     id: plan.id,
     service: plan.service.name,
     category: plan.service.category,
@@ -59,5 +62,13 @@ export const getPlanRows = async (
     depth: 1,
     pagination: false,
   })
-  return docs.map((plan) => toRow(plan, from)).filter((row) => row !== null)
+  const serviceIds = [...new Set(docs.map((p) => (typeof p.service === 'object' ? p.service.id : p.service)))]
+  // Cheapest GamsGo product per service, shown under the official button.
+  const halfByService: Record<number, PlanRow['half']> = {}
+  for (const [id, product] of Object.entries(cheapestByService(await getHalfProducts({ serviceIds })))) {
+    halfByService[Number(id)] = { href: halfHref(product, from), price: product.monthlyPrice ?? null, name: product.name }
+  }
+  return docs
+    .map((plan) => toRow(plan, from, halfByService[typeof plan.service === 'object' ? plan.service.id : plan.service] ?? null))
+    .filter((row) => row !== null)
 }
