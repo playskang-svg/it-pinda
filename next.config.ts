@@ -18,6 +18,19 @@ const nextConfig: NextConfig = {
   // Read more: https://opennext.js.org/cloudflare/howtos/workerd
   serverExternalPackages: ['jose', 'pg-cloudflare'],
 
+  // Scoped to this site: the zone-wide "Always Use HTTPS" switch would also touch other pinda.kr subdomains.
+  redirects: async () => [
+    {
+      source: '/:path*',
+      has: [
+        { type: 'host', value: 'it.pinda.kr' },
+        { type: 'header', key: 'x-forwarded-proto', value: 'http' },
+      ],
+      destination: 'https://it.pinda.kr/:path*',
+      permanent: true,
+    },
+  ],
+
   // Your Next.js config here
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
