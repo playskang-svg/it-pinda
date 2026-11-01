@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { cache } from 'react'
 
+import { PhotoHead } from '@/components/PhotoHead'
 import { PlanTable } from '@/components/PlanTable'
 import { RichText } from '@/components/RichText'
 import { ShareBar } from '@/components/ShareBar'
@@ -78,23 +79,22 @@ export default async function PostPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
         type="application/ld+json"
       />
-      <div className="frame frame--text">
-        {category ? (
-          <Link className="post__category" href={`/${category.slug}`}>
-            {category.title}
-          </Link>
-        ) : null}
-        <h1>{post.title}</h1>
-        <p className="post__date">{formatDate(post.verifiedAt)} 공식 페이지 기준으로 확인</p>
+      <PhotoHead
+        eyebrow={
+          category ? (
+            <Link className="post__category" href={`/${category.slug}`}>
+              {category.title}
+            </Link>
+          ) : null
+        }
+        lede={`${formatDate(post.verifiedAt)} 공식 페이지 기준으로 확인`}
+        photo={hero?.url}
+        photoAlt={hero?.alt}
+        title={post.title}
+      >
         <ShareBar text={post.summary} title={post.title} url={url} />
-      </div>
-      {hero?.url ? (
-        <div className="frame post__hero">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img alt={hero.alt} height={800} src={hero.url} width={1200} />
-        </div>
-      ) : null}
-      <div className="frame frame--text">
+      </PhotoHead>
+      <div className="frame frame--text post__body">
         <aside className="summary">
           <strong>💡 핵심 한 줄 요약</strong>
           <p>{post.summary}</p>
@@ -144,7 +144,7 @@ export default async function PostPage({ params }: Props) {
           가격과 혜택은 바뀔 수 있으니 결제 전에 공식 페이지를 확인해 주세요. 이 사이트의 일부 링크에서는 제휴 수수료를
           받을 수 있으며, 표시가 있는 링크가 이에 해당합니다.
         </p>
-        <ShareBar text={post.summary} title={post.title} url={url} />
+        <ShareBar card text={post.summary} title={post.title} url={url} />
       </div>
     </article>
   )

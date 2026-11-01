@@ -3,10 +3,10 @@ import Link from 'next/link'
 import type { Post } from '@/payload-types'
 import { formatDate } from '@/lib/pricing'
 
-export function PostList({ posts }: { posts: Post[] }) {
+export function PostList({ posts, feature = false }: { posts: Post[]; feature?: boolean }) {
   if (posts.length === 0) return <p>아직 올라온 글이 없습니다.</p>
   return (
-    <ul className="post-list">
+    <ul className={feature ? 'post-list post-list--feature' : 'post-list'}>
       {posts.map((post) => {
         const image = typeof post.heroImage === 'object' ? post.heroImage : null
         return (

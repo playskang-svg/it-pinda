@@ -3,6 +3,8 @@ import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
   output: 'standalone',
+  // next dev would otherwise write AGENTS.md and CLAUDE.md into the repo.
+  agentRules: false,
   outputFileTracingExcludes: { '*': ['**/sharp/**', '**/@img/**'] },
   images: {
     unoptimized: true,

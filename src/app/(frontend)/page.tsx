@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
 import { DealList } from '@/components/DealList'
+import { PhotoHead } from '@/components/PhotoHead'
 import { PlanTable } from '@/components/PlanTable'
 import { PostList } from '@/components/PostList'
 import { getPlanRows } from '@/lib/data'
@@ -26,27 +27,19 @@ export default async function HomePage() {
 
   return (
     <>
-      <section className="hero">
-        <div className="frame hero__grid">
-          <div>
-            <h1>AI·OTT 구독료, 더 내고 있지 않나요?</h1>
-            <p>공식 요금을 나란히 비교하고, 지금 받을 수 있는 공식 할인까지 확인하세요.</p>
-            <a className="button" href="#compare">
-              내 요금제 비교하기
-            </a>
-          </div>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            alt="집 소파에 앉아 휴대폰으로 구독 결제 내역을 확인하는 한국인 여성"
-            fetchPriority="high"
-            height={800}
-            src="/photos/hero.webp"
-            width={1200}
-          />
-        </div>
-      </section>
+      <PhotoHead
+        lede="공식 요금을 나란히 비교하고, 지금 받을 수 있는 공식 할인까지 확인하세요."
+        photo="/photos/hero.webp"
+        photoAlt="집 소파에 앉아 휴대폰으로 구독 결제 내역을 확인하는 한국인 여성"
+        tall
+        title="AI·OTT 구독료, 더 내고 있지 않나요?"
+      >
+        <a className="button" href="#compare">
+          내 요금제 비교하기
+        </a>
+      </PhotoHead>
 
-      <section className="section section--tight" id="compare">
+      <section className="section" id="compare">
         <div className="frame">
           <h2>공식 요금 한눈에 비교</h2>
           <PlanTable limit={7} rows={rows} />
@@ -56,8 +49,10 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="section section--tone">
-        <div className="frame">
+      <section className="section section--photo">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img alt="" className="section__photo" height={800} loading="lazy" src="/photos/family.webp" width={1200} />
+        <div className="frame section__body">
           <h2>이달의 할인</h2>
           <DealList deals={activeDeals} from="home" />
           <Link className="text-link" href="/deals">
@@ -69,7 +64,19 @@ export default async function HomePage() {
       <section className="section">
         <div className="frame">
           <h2>요금제 고르기 전에 읽는 글</h2>
-          <PostList posts={posts.docs} />
+          <PostList feature posts={posts.docs} />
+        </div>
+      </section>
+
+      <section className="section section--photo band">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img alt="" className="section__photo" height={800} loading="lazy" src="/photos/cancel.webp" width={1200} />
+        <div className="frame section__body">
+          <h2>안 쓰는 구독부터 정리하세요</h2>
+          <p>해지와 환불 방법을 정리한 글을 모았습니다.</p>
+          <Link className="button" href="/cancel">
+            해지·환불 안내 보기
+          </Link>
         </div>
       </section>
     </>

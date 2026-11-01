@@ -1,3 +1,4 @@
+import { PhotoHead } from '@/components/PhotoHead'
 import { PlanTable } from '@/components/PlanTable'
 import { PostList } from '@/components/PostList'
 import { ShareBar } from '@/components/ShareBar'
@@ -42,19 +43,11 @@ export async function CategoryPage({
 
   return (
     <>
-      <section className="category-head">
-        <div className="frame category-head__grid">
-          <div>
-            <h1>{title}</h1>
-            <p className="lede">{lede}</p>
-            <ShareBar title={title} url={`${SITE_URL}/${slug}`} />
-          </div>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img alt={photoAlt} height={700} src={photo} width={1050} />
-        </div>
-      </section>
+      <PhotoHead lede={lede} photo={photo} photoAlt={photoAlt} title={title}>
+        <ShareBar title={title} url={`${SITE_URL}/${slug}`} />
+      </PhotoHead>
       {rows?.length ? (
-        <section className="section section--tight">
+        <section className="section">
           <div className="frame">
             <h2>공식 요금표</h2>
             <PlanTable rows={rows} showTabs={false} />
