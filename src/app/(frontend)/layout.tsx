@@ -12,7 +12,21 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: SITE_TITLE, template: `%s | ${SITE_NAME}` },
   description: SITE_DESCRIPTION,
+  keywords: [
+    '핀다구독',
+    'AI 구독료 비교',
+    'ChatGPT 플러스 할인',
+    'Claude Pro 요금',
+    '넷플릭스 요금할인',
+    '유튜브 프리미엄 우회할인',
+    'OTT 구독 할인',
+    '디즈니플러스 할인',
+    '생성형 AI 요금 비교',
+    '구독료 아끼기',
+    '소프트웨어 구독료',
+  ],
   applicationName: SITE_NAME,
+  authors: [{ name: '핀다구독' }],
   robots: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 },
   // Prices must not turn into phone links on mobile browsers.
   formatDetection: { telephone: false },
@@ -31,7 +45,7 @@ export const metadata: Metadata = {
     types: { 'application/rss+xml': '/rss.xml' },
   },
   verification: {
-    other: { 'naver-site-verification': '09b14848dfce85f614c85517924e4e8fd2bd21a9' },
+    other: { 'naver-site-verification': '9f51ba66fb01e0fecb6e0ac342a0ef3ed5e4569e' },
   },
 }
 
@@ -50,6 +64,24 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@graph': [
+                {
+                  '@type': 'WebSite',
+                  '@id': 'https://it.pinda.kr/#website',
+                  url: 'https://it.pinda.kr',
+                  name: '핀다구독',
+                  description: 'AI·OTT 공식 요금제 비교 및 할인 정보 가이드',
+                  inLanguage: 'ko-KR',
+                },
+              ],
+            }),
+          }}
         />
       </head>
       <body>

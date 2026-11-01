@@ -10,7 +10,7 @@
           "src/app/(frontend)/styles.css"
         ],
         "createdAt": "2026-10-31T15:56:58.838Z",
-        "reason": "project CLAUDE.md section 2 requires H2 boxes with a 6px left accent bar and 10px radius"
+        "reason": "project CLAUDE.md section 2 requires H2 boxes with a soft background, 6px left accent bar and 10px radius: .prose h2 follows it"
       }
     ]
   }
