@@ -12,6 +12,11 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: SITE_TITLE, template: `%s | ${SITE_NAME}` },
   description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  robots: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 },
+  // Prices must not turn into phone links on mobile browsers.
+  formatDetection: { telephone: false },
+  icons: { icon: '/favicon.ico', apple: '/apple-touch-icon.png' },
   openGraph: {
     siteName: SITE_NAME,
     title: SITE_TITLE,

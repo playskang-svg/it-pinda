@@ -3,8 +3,10 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { cache } from 'react'
 
+import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { HalfButton } from '@/components/HalfButton'
 import { HalfGrid } from '@/components/HalfGrid'
+import { JsonLd } from '@/components/JsonLd'
 import { PhotoHead } from '@/components/PhotoHead'
 import { PlanTable } from '@/components/PlanTable'
 import { ShareBar } from '@/components/ShareBar'
@@ -12,6 +14,7 @@ import { getPlanRows } from '@/lib/data'
 import { CATEGORY_LABEL, GAMSGO_CODE, getHalfProduct, getHalfProducts, halfHref } from '@/lib/half'
 import { SITE_URL } from '@/lib/payload'
 import { formatDate, formatPrice } from '@/lib/pricing'
+import { pageMeta } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
 
@@ -32,13 +35,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = await getProduct(slug)
   if (!product) return {}
   const price = product.monthlyPrice ? `월 ${formatPrice(product.monthlyPrice, 'KRW')}부터` : '최저가'
-  const title = `${product.name} 반값 구독 — 겜스고 ${price}`
-  return {
-    title,
-    description: product.summary,
-    alternates: { canonical: `/half/${product.slug}` },
-    openGraph: { title, description: product.summary, url: `/half/${product.slug}` },
-  }
+  return pageMeta({
+    title: `${product.name} 반값 구독 — 겜스고 ${price}`,
+    // Written here rather than taken from the scraped copy, which quotes stale dollar prices.
+    description: `${product.name} 공유 구독 가격(${price}), 공식 요금과의 차이, 결제 후 받는 순서와 주의 사항을 정리했습니다. 프로모션 코드 ${GAMSGO_CODE}.`,
+    path: `/half/${product.slug}`,
+  })
 }
 
 export default async function HalfProductPage({ params }: Props) {
@@ -64,11 +66,51 @@ export default async function HalfProductPage({ params }: Props) {
 
   return (
     <article className="half-product">
+      {product.monthlyPrice ? (
+        <JsonLd
+          data={{
+            '@type': 'Product',
+            name: `${product.name} 공유 구독`,
+            description: product.summary,
+            url,
+            image: product.logo ?? undefined,
+            offers: {
+              '@type': 'Offer',
+              url,
+              price: product.monthlyPrice,
+              priceCurrency: 'KRW',
+              priceSpecification: {
+                '@type': 'UnitPriceSpecification',
+                price: product.monthlyPrice,
+                priceCurrency: 'KRW',
+                unitCode: 'MON',
+              },
+              availability: 'https://schema.org/InStock',
+              seller: { '@type': 'Organization', name: 'GamsGo' },
+            },
+          }}
+        />
+      ) : null}
+      {product.faq?.length ? (
+        <JsonLd
+          data={{
+            '@type': 'FAQPage',
+            mainEntity: product.faq.map((item) => ({
+              '@type': 'Question',
+              name: item.q,
+              acceptedAnswer: { '@type': 'Answer', text: item.a },
+            })),
+          }}
+        />
+      ) : null}
       <PhotoHead
         eyebrow={
-          <Link className="post__category" href={`/half#${product.category}`}>
-            {CATEGORY_LABEL[product.category]} 반값 구독
-          </Link>
+          <Breadcrumbs
+            items={[
+              { name: '반값 구독', path: '/half' },
+              { name: product.name, path: `/half/${product.slug}` },
+            ]}
+          />
         }
         lede={product.summary}
         photo={PHOTO[product.category]}

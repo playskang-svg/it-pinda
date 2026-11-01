@@ -1,17 +1,25 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 
 import { DealList } from '@/components/DealList'
 import { HalfButton } from '@/components/HalfButton'
 import { HalfGrid } from '@/components/HalfGrid'
+import { JsonLd } from '@/components/JsonLd'
 import { PhotoHead } from '@/components/PhotoHead'
 import { PlanTable } from '@/components/PlanTable'
 import { PostList } from '@/components/PostList'
 import { getPlanRows } from '@/lib/data'
 import { GAMSGO_CODE, getHalfProducts } from '@/lib/half'
-import { getClient, publishedWhere } from '@/lib/payload'
+import { getClient, publishedWhere, SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, SITE_URL } from '@/lib/payload'
 import { isActiveDeal } from '@/lib/pricing'
+import { pageMeta, publisher } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+  ...pageMeta({ title: SITE_TITLE, description: SITE_DESCRIPTION, path: '/' }),
+  title: { absolute: SITE_TITLE },
+}
 
 export default async function HomePage() {
   const payload = await getClient()
@@ -31,6 +39,16 @@ export default async function HomePage() {
 
   return (
     <>
+      <JsonLd
+        data={{
+          '@type': 'WebSite',
+          name: SITE_NAME,
+          url: SITE_URL,
+          inLanguage: 'ko-KR',
+          description: SITE_DESCRIPTION,
+          publisher,
+        }}
+      />
       <PhotoHead
         lede="공식 요금을 나란히 비교하고, 지금 받을 수 있는 공식 할인까지 확인하세요."
         photo="/photos/hero.webp"

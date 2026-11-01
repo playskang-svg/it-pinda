@@ -1,3 +1,4 @@
+import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { HalfGrid } from '@/components/HalfGrid'
 import { PhotoHead } from '@/components/PhotoHead'
 import { PlanTable } from '@/components/PlanTable'
@@ -47,7 +48,13 @@ export async function CategoryPage({
 
   return (
     <>
-      <PhotoHead lede={lede} photo={photo} photoAlt={photoAlt} title={title} />
+      <PhotoHead
+        eyebrow={<Breadcrumbs items={[{ name: title, path: `/${slug}` }]} />}
+        lede={lede}
+        photo={photo}
+        photoAlt={photoAlt}
+        title={title}
+      />
       {rows?.length ? (
         <section className="section">
           <div className="frame">

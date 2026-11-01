@@ -3,7 +3,8 @@ import { notFound } from 'next/navigation'
 import { cache } from 'react'
 
 import { RichText } from '@/components/RichText'
-import { getClient } from '@/lib/payload'
+import { getClient, SITE_DESCRIPTION } from '@/lib/payload'
+import { pageMeta } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
 
@@ -24,11 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const page = await getPage(slug)
   if (!page) return {}
-  return {
-    title: page.title,
-    description: page.description ?? undefined,
-    alternates: { canonical: `/${page.slug}` },
-  }
+  return pageMeta({ title: page.title, description: page.description ?? SITE_DESCRIPTION, path: `/${page.slug}` })
 }
 
 export default async function InfoPage({ params }: Props) {

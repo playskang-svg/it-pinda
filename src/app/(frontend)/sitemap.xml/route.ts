@@ -2,7 +2,7 @@ import { getClient, publishedWhere, SITE_URL } from '@/lib/payload'
 
 export const dynamic = 'force-dynamic'
 
-const STATIC_PATHS = ['', '/compare', '/deals', '/half', '/ai', '/ott', '/cancel', '/posts', '/contact']
+const STATIC_PATHS = ['', '/compare', '/deals', '/half', '/ai', '/ott', '/cancel', '/vpn', '/posts', '/contact']
 
 export async function GET() {
   const payload = await getClient()

@@ -1,16 +1,18 @@
 import type { Metadata } from 'next'
 
+import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { PhotoHead } from '@/components/PhotoHead'
 import { PostList } from '@/components/PostList'
 import { getClient, publishedWhere } from '@/lib/payload'
+import { pageMeta } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: '전체 글',
   description: 'AI·OTT 구독료와 해지·환불 정보를 다룬 글 모음입니다.',
-  alternates: { canonical: '/posts' },
-}
+  path: '/posts',
+})
 
 export default async function PostsPage() {
   const payload = await getClient()
@@ -24,6 +26,7 @@ export default async function PostsPage() {
   return (
     <>
       <PhotoHead
+        eyebrow={<Breadcrumbs items={[{ name: '전체 글', path: '/posts' }]} />}
         lede="AI·OTT 구독료와 해지·환불 정보를 다룬 글을 모았습니다."
         photo="/photos/student.webp"
         title="전체 글"

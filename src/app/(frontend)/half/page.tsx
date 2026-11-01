@@ -1,10 +1,13 @@
 import type { Metadata } from 'next'
 
+import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { HalfGrid } from '@/components/HalfGrid'
+import { JsonLd } from '@/components/JsonLd'
 import { PhotoHead } from '@/components/PhotoHead'
 import { ShareBar } from '@/components/ShareBar'
 import { CATEGORY_LABEL, CATEGORY_ORDER, GAMSGO_CODE, getHalfProducts } from '@/lib/half'
 import { SITE_URL } from '@/lib/payload'
+import { pageMeta } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
 
@@ -12,18 +15,27 @@ const title = '반값 구독 — AI·OTT·음악 공유 구독 최저가'
 const description =
   '챗GPT, 제미나이, 넷플릭스, 유튜브 프리미엄, 스포티파이를 겜스고 공유 구독으로 월 2,666원부터. 프로모션 코드 WWSQD로 추가 할인.'
 
-export const metadata: Metadata = {
-  title,
-  description,
-  alternates: { canonical: '/half' },
-  openGraph: { title, description, url: '/half' },
-}
+export const metadata: Metadata = pageMeta({ title, description, path: '/half' })
 
 export default async function HalfPage() {
   const products = await getHalfProducts()
   return (
     <>
+      <JsonLd
+        data={{
+          '@type': 'ItemList',
+          name: '반값 구독 상품',
+          numberOfItems: products.length,
+          itemListElement: products.map((product, index) => ({
+            '@type': 'ListItem',
+            position: index + 1,
+            name: `${product.name} 반값 구독`,
+            url: `${SITE_URL}/half/${product.slug}`,
+          })),
+        }}
+      />
       <PhotoHead
+        eyebrow={<Breadcrumbs items={[{ name: '반값 구독', path: '/half' }]} />}
         lede={`정식 요금제를 여러 명이 나눠 쓰는 겜스고 공유 구독입니다. 결제 즉시 로그인 정보가 오고, 프로모션 코드 ${GAMSGO_CODE}를 넣으면 더 내려갑니다.`}
         photo="/photos/student.webp"
         photoAlt="도서관에서 노트북과 헤드폰으로 공부하는 한국인 여성"

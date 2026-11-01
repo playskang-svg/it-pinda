@@ -1,18 +1,14 @@
 import type { Metadata } from 'next'
 
 import { CategoryPage } from '@/components/CategoryPage'
+import { pageMeta } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
 
 const title = 'OTT 구독'
 const description = '넷플릭스·티빙·웨이브·디즈니+ 요금제와 묶음 상품을 비교하고 월 구독료를 줄이는 방법을 정리했습니다.'
 
-export const metadata: Metadata = {
-  title: 'OTT 요금제 비교',
-  description,
-  alternates: { canonical: '/ott' },
-  openGraph: { title: 'OTT 요금제 비교', description, url: '/ott' },
-}
+export const metadata: Metadata = pageMeta({ title: 'OTT 요금제 비교', description, path: '/ott' })
 
 export default function Page() {
   return (

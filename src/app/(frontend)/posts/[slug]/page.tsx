@@ -3,7 +3,9 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { cache } from 'react'
 
+import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { HalfCta } from '@/components/HalfCta'
+import { JsonLd } from '@/components/JsonLd'
 import { PhotoHead } from '@/components/PhotoHead'
 import { PlanTable } from '@/components/PlanTable'
 import { RichText } from '@/components/RichText'
@@ -12,6 +14,7 @@ import { getPlanRows } from '@/lib/data'
 import { cheapestByService, getHalfProducts, getOfficialFloor } from '@/lib/half'
 import { absoluteUrl, getClient, publishedWhere, SITE_URL } from '@/lib/payload'
 import { formatDate } from '@/lib/pricing'
+import { pageMeta, publisher } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
 
@@ -34,22 +37,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!post) return {}
   const og = typeof post.ogImage === 'object' ? post.ogImage?.url : null
   const image = og ? absoluteUrl(og) : '/og-default.png'
-  const title = post.metaTitle || post.title
-  return {
-    title,
+  const category = typeof post.category === 'object' ? post.category : null
+  return pageMeta({
+    title: post.metaTitle || post.title,
     description: post.summary,
-    alternates: { canonical: `/posts/${post.slug}` },
-    openGraph: {
-      type: 'article',
-      title,
-      description: post.summary,
-      url: `/posts/${post.slug}`,
+    path: `/posts/${post.slug}`,
+    image,
+    article: {
       publishedTime: post.publishedAt,
       modifiedTime: post.updatedAt,
-      images: [{ url: image, width: 1200, height: 630 }],
+      section: category?.title,
     },
-    twitter: { card: 'summary_large_image', title, description: post.summary, images: [image] },
-  }
+  })
 }
 
 export default async function PostPage({ params }: Props) {
@@ -71,30 +70,32 @@ export default async function PostPage({ params }: Props) {
   const related = (post.relatedPosts ?? []).filter((p) => typeof p === 'object')
   const url = `${SITE_URL}/posts/${post.slug}`
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: post.title,
-    description: post.summary,
-    datePublished: post.publishedAt,
-    dateModified: post.updatedAt,
-    image: hero?.url ? absoluteUrl(hero.url) : undefined,
-    mainEntityOfPage: url,
-  }
 
   return (
     <article className="post">
-      <script
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
-        type="application/ld+json"
+      <JsonLd
+        data={{
+          '@type': 'Article',
+          headline: post.title,
+          description: post.summary,
+          datePublished: post.publishedAt,
+          dateModified: post.updatedAt,
+          image: hero?.url ? absoluteUrl(hero.url) : undefined,
+          mainEntityOfPage: url,
+          articleSection: category?.title,
+          inLanguage: 'ko-KR',
+          author: publisher,
+          publisher,
+        }}
       />
       <PhotoHead
         eyebrow={
-          category ? (
-            <Link className="post__category" href={`/${category.slug}`}>
-              {category.title}
-            </Link>
-          ) : null
+          <Breadcrumbs
+            items={[
+              ...(category ? [{ name: category.title, path: `/${category.slug}` }] : []),
+              { name: post.title, path: `/posts/${post.slug}` },
+            ]}
+          />
         }
         lede={`${formatDate(post.verifiedAt)} 공식 페이지 기준으로 확인`}
         photo={hero?.url}

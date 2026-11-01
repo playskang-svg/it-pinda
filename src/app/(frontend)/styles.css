@@ -333,6 +333,46 @@ small {
   margin-top: 28px;
 }
 
+/* Sits on the photo heading, which is always dark */
+.breadcrumbs {
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: #cdd6e3;
+}
+
+.breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 0;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.breadcrumbs li + li::before {
+  content: '›';
+  margin-inline: 8px;
+  color: #8a98ad;
+}
+
+.breadcrumbs a {
+  color: #8fe3c0;
+  text-decoration: none;
+}
+
+.breadcrumbs a:hover {
+  text-decoration: underline;
+}
+
+.breadcrumbs [aria-current] {
+  display: inline-block;
+  max-width: 26em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+  white-space: nowrap;
+}
+
 .post__category {
   display: inline-block;
   margin-bottom: 10px;

@@ -1,10 +1,12 @@
 import type { Metadata } from 'next'
 
-export const metadata: Metadata = {
+import { pageMeta } from '@/lib/seo'
+
+export const metadata: Metadata = pageMeta({
   title: '문의 안내',
   description: '결제, 환불, 접속 문제는 각 서비스와 겜스고 고객센터에서 처리합니다.',
-  alternates: { canonical: '/contact' },
-}
+  path: '/contact',
+})
 
 const CENTERS = [
   { name: '겜스고 고객센터 (반값 구독 주문·환불·접속)', url: 'https://www.gamsgo.com/ko/contact-us', note: '24시간 채팅 상담' },
