@@ -19,17 +19,17 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ['jose', 'pg-cloudflare'],
 
   // Scoped to this site: the zone-wide "Always Use HTTPS" switch would also touch other pinda.kr subdomains.
-  redirects: async () => [
-    {
-      source: '/:path*',
-      has: [
-        { type: 'host', value: 'it.pinda.kr' },
-        { type: 'header', key: 'x-forwarded-proto', value: 'http' },
-      ],
-      destination: 'https://it.pinda.kr/:path*',
-      permanent: true,
-    },
-  ],
+  // OpenNext tests `value` unanchored, so ^http$ keeps it from matching "https"; `/:path*` leaves the root unsubstituted.
+  redirects: async () => {
+    const has = [
+      { type: 'host' as const, value: 'it.pinda.kr' },
+      { type: 'header' as const, key: 'x-forwarded-proto', value: '^http$' },
+    ]
+    return [
+      { source: '/', has, destination: 'https://it.pinda.kr/', permanent: true },
+      { source: '/:path+', has, destination: 'https://it.pinda.kr/:path+', permanent: true },
+    ]
+  },
 
   // Your Next.js config here
   webpack: (webpackConfig) => {
