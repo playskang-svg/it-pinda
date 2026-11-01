@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 
+import { CopyCode } from '@/components/CopyCode'
 import { DealList } from '@/components/DealList'
 import { HalfButton } from '@/components/HalfButton'
 import { HalfGrid } from '@/components/HalfGrid'
@@ -9,7 +10,7 @@ import { PhotoHead } from '@/components/PhotoHead'
 import { PlanTable } from '@/components/PlanTable'
 import { PostList } from '@/components/PostList'
 import { getPlanRows } from '@/lib/data'
-import { GAMSGO_CODE, getHalfProducts } from '@/lib/half'
+import { getHalfProducts } from '@/lib/half'
 import { getClient, publishedWhere, SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, SITE_URL } from '@/lib/payload'
 import { isActiveDeal } from '@/lib/pricing'
 import { pageMeta, publisher } from '@/lib/seo'
@@ -69,8 +70,11 @@ export default async function HomePage() {
           <h2>지금 가장 많이 찾는 반값 구독</h2>
           <p className="section-lede">
             정식 요금제를 여러 명이 나눠 쓰는 겜스고 공유 구독입니다. 정가로 계속 내면 1년에 수십만 원이 그냥
-            나갑니다. 프로모션 코드 <code>{GAMSGO_CODE}</code>로 추가 할인.
+            나갑니다. <Link href="/half#gamsgo">겜스고가 어떤 곳인지 보기</Link>
           </p>
+          <div className="half-code half-code--home">
+            <CopyCode />
+          </div>
           <HalfGrid from="home" products={featured} />
           <Link className="text-link" href="/half">
             반값 구독 전체 보기

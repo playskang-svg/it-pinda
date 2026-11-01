@@ -947,20 +947,93 @@ small {
   color: var(--ink-soft);
 }
 
-.section--tone .section-lede code,
-.half-cta code,
-.half-code code {
-  padding: 2px 8px;
-  border-radius: 6px;
+.section-lede a,
+.half-cta p a {
+  color: var(--accent-deep);
+  font-weight: 600;
+  text-underline-offset: 3px;
+}
+
+.copy-code {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  min-height: 48px;
+  padding: 8px 16px;
+  border: 2px dashed #b3620b;
+  border-radius: 10px;
   background: #fff3cd;
   color: #7a4b00;
-  font-family: inherit;
+  font: inherit;
+  font-size: 14.5px;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.copy-code:hover {
+  background: #ffe8a3;
+}
+
+.copy-code strong {
+  font-size: 19px;
   font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.copy-code em {
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+}
+
+.copy-code.is-done {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+}
+
+.gamsgo-intro {
+  max-width: 760px;
+  margin-block: 40px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+}
+
+.half-product .gamsgo-intro h2,
+.gamsgo-intro h2 {
+  margin: 0 0 10px;
+  font-size: clamp(20px, 2.2vw, 23px);
+}
+
+.gamsgo-intro p {
+  margin: 0 0 10px;
+}
+
+.gamsgo-intro ul {
+  padding-left: 20px;
+  margin: 0 0 18px;
+}
+
+.gamsgo-intro li {
+  margin-bottom: 4px;
+}
+
+.gamsgo-intro small {
+  display: block;
+  margin-top: 10px;
+}
+
+.half-code--home {
+  margin: -14px 0 24px;
 }
 
 .button--half {
   position: relative;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 2px 8px;
   background: #d9480f;
   animation: half-blink 1.6s ease-in-out infinite;
 }
@@ -974,6 +1047,7 @@ small {
 .deals .button--half strong {
   color: #fff;
   font-weight: 800;
+  white-space: nowrap;
 }
 
 .button--half-small {
@@ -1120,6 +1194,10 @@ small {
   font-size: 1.15em;
 }
 
+.half-cta .copy-code {
+  margin-bottom: 12px;
+}
+
 .half-cta__buttons {
   display: flex;
   flex-wrap: wrap;
@@ -1160,8 +1238,7 @@ small {
 }
 
 .half-code {
-  margin: 16px 0 0;
-  font-size: 15.5px;
+  margin-top: 16px;
 }
 
 .half-product h2 {

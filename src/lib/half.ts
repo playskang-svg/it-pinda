@@ -3,7 +3,7 @@ import type { GamsgoProduct } from '@/payload-types'
 import { getClient } from './payload'
 
 // GamsGo affiliate identity. The per-product links live in affiliate-links as gg-<slug>.
-export const GAMSGO_CODE = 'WWSQD'
+export { GAMSGO_CODE } from './half-code'
 export const GAMSGO_GO = '/go/gamsgo'
 
 export const CATEGORY_LABEL: Record<GamsgoProduct['category'], string> = {

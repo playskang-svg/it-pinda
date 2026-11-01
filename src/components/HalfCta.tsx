@@ -1,7 +1,8 @@
 import Link from 'next/link'
 
+import { CopyCode } from '@/components/CopyCode'
 import { HalfButton } from '@/components/HalfButton'
-import { GAMSGO_CODE, GAMSGO_GO, halfHref, yearlyLoss } from '@/lib/half'
+import { GAMSGO_GO, halfHref, yearlyLoss } from '@/lib/half'
 import { formatPrice } from '@/lib/pricing'
 import type { GamsgoProduct } from '@/payload-types'
 
@@ -26,9 +27,10 @@ export function HalfCta({
       <strong className="half-cta__title">💸 {title}</strong>
       <p>
         겜스고에서 정식 요금제를 여러 명이 나눠 쓰면 월 요금이 크게 내려갑니다. 결제 후 몇 초 안에 로그인
-        정보가 오고, 문제가 생기면 겜스고 고객센터가 24시간 처리합니다. 프로모션 코드{' '}
-        <code>{GAMSGO_CODE}</code>를 넣으면 추가 할인이 됩니다.
+        정보가 오고, 문제가 생기면 겜스고 고객센터가 24시간 처리합니다.{' '}
+        <Link href="/half#gamsgo">겜스고가 어떤 곳인지 보기</Link>
       </p>
+      <CopyCode />
       {biggest ? (
         <p className="half-cta__loss">
           지금처럼 정가로 계속 내면 1년에 <strong>{formatPrice(biggest, 'KRW')}</strong>을 더 내는 셈입니다.

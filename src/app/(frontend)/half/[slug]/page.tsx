@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation'
 import { cache } from 'react'
 
 import { Breadcrumbs } from '@/components/Breadcrumbs'
+import { CopyCode } from '@/components/CopyCode'
+import { GamsgoIntro } from '@/components/GamsgoIntro'
 import { HalfButton } from '@/components/HalfButton'
 import { HalfGrid } from '@/components/HalfGrid'
 import { JsonLd } from '@/components/JsonLd'
@@ -38,7 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return pageMeta({
     title: `${product.name} 반값 구독 — 겜스고 ${price}`,
     // Written here rather than taken from the scraped copy, which quotes stale dollar prices.
-    description: `${product.name} 공유 구독 가격(${price}), 공식 요금과의 차이, 결제 후 받는 순서와 주의 사항을 정리했습니다. 프로모션 코드 ${GAMSGO_CODE}.`,
+    description: `${product.name} 공유 구독 가격(${price}), 공식 요금과의 차이, 결제 후 받는 순서와 주의 사항을 정리했습니다. 겜스고 할인코드 ${GAMSGO_CODE}.`,
     path: `/half/${product.slug}`,
   })
 }
@@ -135,13 +137,14 @@ export default async function HalfProductPage({ params }: Props) {
             </div>
             <HalfButton href={href} label={`${product.name} 구독할인 받기`} />
           </div>
-          <p className="half-code">
-            결제 창에서 프로모션 코드 <code>{GAMSGO_CODE}</code>를 넣으면 추가 할인이 적용됩니다.
-          </p>
+          <div className="half-code">
+            <CopyCode />
+          </div>
 
           <h2>이렇게 받아요</h2>
           <ol className="half-steps">
-            <li>위 버튼으로 겜스고 상품 페이지에 들어가 기간(1·3·6·12개월)을 고릅니다.</li>
+            <li>위 할인코드를 누르면 복사됩니다. 버튼으로 겜스고 상품 페이지에 들어가 기간을 고릅니다.</li>
+            <li>결제 화면의 코드 입력칸에 할인코드를 붙여 넣고 할인 금액을 확인합니다. 주문 후에는 넣을 수 없습니다.</li>
             <li>결제하면 보통 몇 초 안에 로그인 정보가 주문 페이지와 메일로 옵니다.</li>
             <li>안내대로 로그인해 바로 씁니다. 접속이 막히면 겜스고 주문 페이지에서 교체나 환불을 신청합니다.</li>
           </ol>
@@ -175,6 +178,8 @@ export default async function HalfProductPage({ params }: Props) {
               ))}
             </>
           ) : null}
+
+          <GamsgoIntro />
 
           <h2>꼭 알아 두세요</h2>
           <ul className="half-features">
