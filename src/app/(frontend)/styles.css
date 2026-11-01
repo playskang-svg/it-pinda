@@ -961,18 +961,19 @@ small {
 .button--half {
   position: relative;
   gap: 8px;
-  background: #e8590c;
+  background: #d9480f;
   animation: half-blink 1.6s ease-in-out infinite;
 }
 
 .button--half:hover {
-  background: #c94a08;
+  background: #b93d0c;
   animation: none;
 }
 
-.button--half strong {
+.button--half strong,
+.deals .button--half strong {
+  color: #fff;
   font-weight: 800;
-  opacity: 0.95;
 }
 
 .button--half-small {
