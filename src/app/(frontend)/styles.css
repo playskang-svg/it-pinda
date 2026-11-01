@@ -878,7 +878,9 @@ small {
 /* Centered share card at the end of a post */
 .share--card {
   justify-content: center;
+  margin-top: 40px;
   padding: 24px;
+  background: #fff;
   border: 1px solid var(--line);
   border-radius: var(--radius);
 }

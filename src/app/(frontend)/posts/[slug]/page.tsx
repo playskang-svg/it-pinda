@@ -91,9 +91,7 @@ export default async function PostPage({ params }: Props) {
         photo={hero?.url}
         photoAlt={hero?.alt}
         title={post.title}
-      >
-        <ShareBar text={post.summary} title={post.title} url={url} />
-      </PhotoHead>
+      />
       <div className="frame frame--text post__body">
         <aside className="summary">
           <strong>💡 핵심 한 줄 요약</strong>

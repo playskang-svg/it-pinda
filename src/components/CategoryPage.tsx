@@ -43,9 +43,7 @@ export async function CategoryPage({
 
   return (
     <>
-      <PhotoHead lede={lede} photo={photo} photoAlt={photoAlt} title={title}>
-        <ShareBar title={title} url={`${SITE_URL}/${slug}`} />
-      </PhotoHead>
+      <PhotoHead lede={lede} photo={photo} photoAlt={photoAlt} title={title} />
       {rows?.length ? (
         <section className="section">
           <div className="frame">
@@ -58,6 +56,7 @@ export async function CategoryPage({
         <div className="frame">
           <h2>{title} 글 모음</h2>
           <PostList posts={posts?.docs ?? []} />
+          <ShareBar card title={title} url={`${SITE_URL}/${slug}`} />
         </div>
       </section>
     </>

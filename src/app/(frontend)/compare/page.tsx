@@ -26,12 +26,11 @@ export default async function ComparePage() {
         lede="모든 요금은 공식 페이지에서 직접 확인한 값이며, 확인일을 함께 적었습니다. 달러 요금은 환산하지 않고 공식 표기 그대로 보여 드립니다."
         photo="/photos/compare.webp"
         title={title}
-      >
-        <ShareBar title={title} url={`${SITE_URL}/compare`} />
-      </PhotoHead>
+      />
       <section className="section">
         <div className="frame">
           <PlanTable rows={rows} />
+          <ShareBar card title={title} url={`${SITE_URL}/compare`} />
         </div>
       </section>
     </>

@@ -28,12 +28,11 @@ export default async function DealsPage() {
         lede="공식 페이지에 표기된 혜택만 올립니다. 종료일이 지난 할인은 자동으로 사라집니다."
         photo="/photos/receipt.webp"
         title={title}
-      >
-        <ShareBar title={title} url={`${SITE_URL}/deals`} />
-      </PhotoHead>
+      />
       <section className="section section--tone">
         <div className="frame">
           <DealList deals={deals} from="deals" />
+          <ShareBar card title={title} url={`${SITE_URL}/deals`} />
         </div>
       </section>
     </>
