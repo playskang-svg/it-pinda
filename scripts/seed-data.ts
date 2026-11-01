@@ -393,9 +393,9 @@ export const pages: { slug: string; title: string; description: string; body: Bl
   {
     slug: 'about',
     title: '사이트 소개',
-    description: '구독할인 정보센터가 어떤 곳이고 어떤 기준으로 정보를 다루는지 안내합니다.',
+    description: '핀다구독이 어떤 곳이고 어떤 기준으로 정보를 다루는지 안내합니다.',
     body: [
-      { p: '구독할인 정보센터는 AI·OTT 구독의 공식 요금과 할인, 해지 방법을 정리하는 개인 운영 정보 사이트입니다.' },
+      { p: '핀다구독은 AI·OTT 구독의 공식 요금과 할인, 해지 방법을 정리하는 개인 운영 정보 사이트입니다.' },
       { h2: '각 서비스의 공식 사이트가 아닙니다' },
       { p: '이 사이트는 챗GPT, 클로드, 구글, 넷플릭스, 티빙, 웨이브, 디즈니+ 등 어떤 구독 서비스의 운영사와도 무관합니다. 서비스 이름은 정보 제공을 위해 표기하며, 각 상표의 권리는 해당 회사에 있습니다.' },
       { p: '결제, 해지, 환불 처리는 이 사이트에서 할 수 없습니다. 결제한 플랫폼의 고객센터로 문의해 주세요.' },
@@ -438,7 +438,7 @@ export const pages: { slug: string; title: string; description: string; body: Bl
   {
     slug: 'privacy',
     title: '개인정보처리방침',
-    description: '구독할인 정보센터의 개인정보 처리 기준입니다.',
+    description: '핀다구독의 개인정보 처리 기준입니다.',
     body: [
       { h2: '수집 항목과 목적' },
       { p: '이 사이트는 회원 가입과 문의 양식이 없으며 이름, 이메일 등 개인정보를 직접 받지 않습니다.' },
@@ -455,7 +455,7 @@ export const pages: { slug: string; title: string; description: string; body: Bl
   {
     slug: 'terms',
     title: '이용약관',
-    description: '구독할인 정보센터 이용 조건입니다.',
+    description: '핀다구독 이용 조건입니다.',
     body: [
       { h2: '정보의 성격' },
       { p: '이 사이트의 내용은 일반 정보이며, 특정 서비스의 가입을 보장하거나 권유하지 않습니다. 요금과 조건은 언제든 바뀔 수 있습니다.' },

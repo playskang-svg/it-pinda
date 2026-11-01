@@ -51,8 +51,8 @@ export default async function HomePage() {
       <JsonLd
         data={{
           '@type': 'WebSite',
-          name: SITE_NAME_COMPACT,
-          alternateName: [SITE_NAME, 'it.pinda.kr'],
+          name: SITE_NAME,
+          alternateName: [SITE_NAME_COMPACT, '구독할인 정보센터', 'it.pinda.kr'],
           url: SITE_URL,
           inLanguage: 'ko-KR',
           description: SITE_DESCRIPTION,
@@ -60,8 +60,8 @@ export default async function HomePage() {
         }}
       />
       <PhotoHead
-        eyebrow={<p className="post__category">{SITE_NAME_COMPACT}</p>}
-        lede="공식 요금을 나란히 비교하고, 지금 받을 수 있는 공식 할인까지 확인하세요."
+        eyebrow={<p className="post__category">{SITE_NAME}</p>}
+        lede="핀다구독에서 공식 요금을 나란히 비교하고, 지금 받을 수 있는 공식 할인까지 확인하세요."
         photo="/photos/hero.webp"
         photoAlt="집 소파에 앉아 휴대폰으로 구독 결제 내역을 확인하는 한국인 여성"
         tall
